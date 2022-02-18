@@ -1,0 +1,66 @@
+apiVersion: eventstreams.ibm.com/v1beta1
+kind: EventStreams
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace}}
+spec:
+  version: {{ .Values.version}}
+  license:
+    # By installing this product you accept the license terms at https://ibm.biz/es-license
+    accept: true
+    use: {{ .Values.license_use }}
+  adminApi: {}
+  adminUI: {}
+  apicurioRegistry: {}
+  collector: {}
+  restProducer: {}
+  strimziOverrides:
+    kafka:
+      replicas: {{ .Values.kafka_replicas}}
+      authorization:
+        type: runas
+      config:
+        inter.broker.protocol.version: "2.8"
+        interceptor.class.names: com.ibm.eventstreams.interceptors.metrics.ProducerMetricsInterceptor
+        log.cleaner.threads: 6
+        log.message.format.version: "2.8"
+        num.io.threads: 24
+        num.network.threads: 9
+        num.replica.fetchers: 3
+        offsets.topic.replication.factor: 3
+      {{- with .Values.listeners}}
+      listeners:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      metrics: {}
+      {{- with .Values.resources }}
+      resources:
+        requests:
+          cpu: {{.requests.cpu }}
+          memory: {{.requests.memory  }}
+        limits:
+          cpu: {{.limits.cpu  }}
+          memory: {{.limits.memory }}
+      {{- end }}
+      {{- with .Values.storage_kafka }}
+      storage:
+        type: {{ .type }}
+      {{- if ne .type "ephemeral"}}
+        size: {{ .size }}
+        class: {{ .class }}
+      {{- end }}
+      {{- end }}
+    zookeeper:
+      replicas: {{ .Values.zookeeper_replicas}}
+      metrics: {}
+      {{- with .Values.storage_zookeeper }}
+      storage:
+        type: {{ .type }}
+      {{- if ne .type "ephemeral"}}
+        size: {{ .size }}
+        class: {{ .class }}
+      {{- end }}
+      {{- end }}
+  requestIbmServices:
+    iam: {{ .Values.requestIbmServices_iam}}
+    monitoring: {{ .Values.requestIbmServices_monitoring}}
