@@ -1,0 +1,43 @@
+# Default values for eventstreams instance
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+name: es-instance
+#namespace: openshift-operators
+version: 10.5.0
+license_use: CloudPakForIntegrationNonProduction
+kafka_replicas: 1
+zookeeper_replicas: 1
+requestIbmServices_iam: false
+requestIbmServices_monitoring: false
+
+resources:
+ requests:
+   memory: 128Mi
+   cpu: 100m
+ limits:
+   memory: 2Gi
+   cpu: '1'
+
+
+authorization:
+  type: runas
+
+storage_kafka:
+  type: ephemeral
+  #  size: 10Gi
+  # class: ""
+
+storage_zookeeper:
+  type: persistent-claim
+  size: 10Gi
+  class: ""
+
+
+listeners:
+  external:
+    authentication:
+      type: scram-sha-512
+    type: route
+  tls:
+    authentication:
+      type: tls
