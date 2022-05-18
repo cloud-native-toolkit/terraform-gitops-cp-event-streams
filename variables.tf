@@ -152,19 +152,19 @@ variable "kafka_storageclass" {
 variable "zookeeper_storageclass" {
   type        = string
   description = "Storage class for zookeeper - applicable only for persistent storage type"
-  default     = ""
+  default     = "ibmc-vpc-block-10iops-tier"
 }
 
 variable "kafka_storagetype" {
   type        = string
   description = "Storage type for kafka"
-  default     = "ephemeral"
+  default     = "persistent-claim"
 }
 
 variable "zookeeper_storagetype" {
   type        = string
   description = "Storage type for zookeeper"
-  default     = "ephemeral"
+  default     = "persistent-claim"
 }
 
 variable "kafka_storagesize" {
@@ -176,7 +176,7 @@ variable "kafka_storagesize" {
 variable "zookeeper_storagesize" {
   type        = string
   description = "Storage size - applicable only for persistent storage type"
-  default     = ""
+  default     = "4Gi"
 }
 
 variable "service_name" {
