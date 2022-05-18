@@ -30,7 +30,7 @@ versions:
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-namespace.git
             version: '>= 1.0.0'
-      - id: operator
+      - id: eventstreams
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams-operator.git
             version: ">= 1.0.0"
