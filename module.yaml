@@ -62,4 +62,4 @@ versions:
       - name: license_use
         moduleRef:
           id: dep-manager
-          output: operator.license_use
+          output: eventstreams.license_use
