@@ -1,5 +1,5 @@
 module gitops-cp-eventstreams {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams-operator.git"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-es-operator.git"
 
   gitops_config   = module.gitops.gitops_config
   git_credentials = module.gitops.git_credentials

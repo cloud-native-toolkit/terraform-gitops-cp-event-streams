@@ -32,7 +32,7 @@ versions:
             version: '>= 1.0.0'
       - id: eventstreams
         refs:
-          - source: github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams-operator.git
+          - source: github.com/cloud-native-toolkit/terraform-gitops-cp-es-operator.git
             version: ">= 1.0.0"
     variables:
       - name: gitops_config
