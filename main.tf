@@ -9,14 +9,14 @@ locals {
   namespace          = var.namespace
   layer_config       = var.gitops_config[local.layer]
   values_file        = "values.yaml"
-  kafka_listeners_insecure = [
-    {
-      name = "plain"
-      port = "9092"
-      type = "internal"
-      tls  = "false"
-    }
-  ]
+  #kafka_listeners_insecure = [
+  #  {
+  #    name = "plain"
+  #    port = "9092"
+  #    type = "internal"
+  #    tls  = "false"
+  #  }
+  #]
   kafka_listeners_secure = [
     {
       name = "external"
@@ -37,8 +37,8 @@ locals {
       }
     }
   ]
-  kafka_listeners_locals = var.kafka_listener_type == "secure" ? local.kafka_listeners_secure : local.kafka_listeners_insecure
-  kafka_listeners        = length(var.kafka_listeners) > 0 ? var.kafka_listeners : local.kafka_listeners_locals
+  #kafka_listeners_locals = var.kafka_listener_type == "secure" ? local.kafka_listeners_secure : local.kafka_listeners_insecure
+  kafka_listeners = length(var.kafka_listeners) > 0 ? var.kafka_listeners : local.kafka_listeners_secure
   values_content = {
     apiVersion = var.es_apiVersion
     name       = var.service_name
