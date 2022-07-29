@@ -203,7 +203,7 @@ variable "kafka_log_message_format_version" {
 }
 
 variable "kafka_listeners" {
-  type        = list(map(string))
+  type        = list
   description = "Kafka listerners defaults to secure - override to provide light-insecure"
   default     = []
 }
