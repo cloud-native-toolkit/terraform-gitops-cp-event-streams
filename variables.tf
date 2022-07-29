@@ -204,7 +204,7 @@ variable "kafka_log_message_format_version" {
 
 variable "kafka_listeners" {
   type        = list
-  description = "Kafka listerners"
+  description = "Kafka listerners list"
   default     = []
 }
 
