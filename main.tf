@@ -15,7 +15,8 @@ locals {
       port = "9092"
       type = "internal"
       tls  = "false"
-    }
+    },
+    {}
   ]
   kafka_listeners_secure = [
     {
