@@ -37,7 +37,7 @@ locals {
       }
     }
   ]
-  kafka_listeners_locals = var.kafka_listener_type == "secure" ? tolist(local.kafka_listeners_secure) : tolist(local.kafka_listeners_insecure)
+  kafka_listeners_locals = var.kafka_listener_type == "secure" ? local.kafka_listeners_secure : local.kafka_listeners_insecure
   kafka_listeners        = length(var.kafka_listeners) > 0 ? var.kafka_listeners : local.kafka_listeners_locals
   values_content = {
     apiVersion = var.es_apiVersion

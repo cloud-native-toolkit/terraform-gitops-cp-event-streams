@@ -203,7 +203,7 @@ variable "kafka_log_message_format_version" {
 }
 
 variable "kafka_listeners" {
-  type        = list
+  type        = list(map(string))
   description = "Kafka listerners list"
   default     = []
 }
