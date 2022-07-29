@@ -9,8 +9,39 @@ locals {
   namespace          = var.namespace
   layer_config       = var.gitops_config[local.layer]
   values_file        = "values.yaml"
+  kafka_listeners_insecure = [
+    {
+      name = "plain"
+      port = "9092"
+      type = "internal"
+      tls  = "false"
+    }
+  ]
+  kafka_listeners_secure = [
+    {
+      name = "external"
+      port = "9094"
+      type = "route"
+      tls  = "true"
+      authentication = {
+        type = "scram-sha-512"
+      }
+    },
+    {
+      name = "tls"
+      port = "9093"
+      type = "internal"
+      tls  = "true"
+      authentication = {
+        type = "tls"
+      }
+    }
+  ]
+
+  kafka_listeners = length(var.kafka_listeners) > 0 ? var.kafka_listeners : (var.kafka_listener_type == "secure" ? local.kafka_listeners_secure : local.kafka_listeners_insecure)
   values_content = {
-    name = var.service_name
+    apiVersion = var.es_apiVersion
+    name       = var.service_name
     #namespace                     = var.namespace
     version                       = var.es_version
     license_use                   = var.license_use
@@ -18,6 +49,10 @@ locals {
     zookeeper_replicas            = var.zookeeper_replicas
     requestIbmServices_iam        = var.requestIbmServices_iam
     requestIbmServices_monitoring = var.requestIbmServices_monitoring
+    kafka_config = {
+      inter_broker_protocol_version = var.kafka_inter_broker_protocol_version
+      log_message_format_version    = var.kafka_log_message_format_version
+    }
     storage_kafka = {
       type  = var.kafka_storagetype
       class = var.kafka_storageclass
@@ -38,20 +73,7 @@ locals {
         memory = var.memorylimits
       }
     }
-    listeners = {
-      external = {
-        authentication = {
-          type = "scram-sha-512"
-        }
-        type = "route"
-      }
-      tls = {
-        authentication = {
-          type = "tls"
-        }
-      }
-    }
-
+    listeners = local.kafka_listeners
   }
 }
 

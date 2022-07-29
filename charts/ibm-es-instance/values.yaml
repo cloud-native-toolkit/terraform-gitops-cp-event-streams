@@ -2,21 +2,26 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 name: es-instance
+apiVersion: v1beta2
 #namespace: openshift-operators
-version: 10.5.0
+version: 11.0.2
 license_use: CloudPakForIntegrationNonProduction
 kafka_replicas: 1
 zookeeper_replicas: 1
-requestIbmServices_iam: false
-requestIbmServices_monitoring: false
+requestIbmServices_iam: true
+requestIbmServices_monitoring: true
+
+kafka_config:
+  inter_broker_protocol_version: 3.2
+  log_message_format_version: 3.2
 
 resources:
  requests:
-   memory: 128Mi
-   cpu: 100m
+   memory: "128Mi"
+   cpu: "100m"
  limits:
-   memory: 2Gi
-   cpu: '1'
+   memory: "2Gi"
+   cpu: "1"
 
 
 authorization:
@@ -30,14 +35,19 @@ storage_kafka:
 storage_zookeeper:
   type: persistent-claim
   size: 10Gi
-  class: ""
+  class: "ibmc-vpc-block-10iops-tier"
 
 
 listeners:
-  external:
+  - name: external
+    port: 9094
+    tls: true
     authentication:
-      type: scram-sha-512
+      type: "scram-sha-512"
     type: route
-  tls:
+  - name: tls
+    port: 9093
+    type: internal
+    tls: true
     authentication:
-      type: tls
+      type: "tls"

@@ -117,7 +117,7 @@ variable "zookeeper_replicas" {
 variable "es_version" {
   type        = string
   description = "Version of Event streams to be installed"
-  default     = "10.5.0"
+  default     = "11.0.2"
 }
 variable "cpulimits" {
   type        = string
@@ -183,4 +183,33 @@ variable "service_name" {
   type        = string
   description = "Event stream instance name"
   default     = "es-instance"
+}
+
+variable "es_apiVersion" {
+  type        = string
+  description = "Event stream API version"
+  default     = "v1beta2"
+}
+
+variable "kafka_inter_broker_protocol_version" {
+  type        = string
+  description = "Kafka config inter broker protocol version"
+  default     = "3.2"
+}
+variable "kafka_log_message_format_version" {
+  type        = string
+  description = "Kafka config loag message format version"
+  default     = "3.2"
+}
+
+variable "kafka_listeners" {
+  type        = list
+  description = "Kafka listerners"
+  default     = []
+}
+
+variable "kafka_listener_type" {
+  type        = string
+  description = "Kafka listener type, possible values - secure, insecure"
+  default     = "secure"
 }
