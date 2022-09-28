@@ -11,6 +11,7 @@ variable "cluster_password" {
 
 variable "server_url" {
   type = string
+  default = ""
 }
 
 variable "bootstrap_prefix" {
