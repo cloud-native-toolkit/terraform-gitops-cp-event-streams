@@ -92,7 +92,7 @@ resource gitops_pull_secret cp_icr_io {
   kubeseal_cert = var.kubeseal_cert
 
 
-  secret_name = local.secret_name
+  secret_name = "ibm-entitlement-key"
   registry_server = "cp.icr.io"
   registry_username = "cp"
   registry_password = var.entitlement_key
