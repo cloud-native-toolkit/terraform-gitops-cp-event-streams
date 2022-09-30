@@ -1,6 +1,5 @@
 locals {
   name               = var.service_name
-  bin_dir            = module.setup_clis.bin_dir
   yaml_dir           = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   service_url        = "http://${local.name}.${var.namespace}"
   layer              = "services"
@@ -77,10 +76,6 @@ locals {
   }
 }
 
-module setup_clis {
-  source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
-}
-
 resource gitops_pull_secret cp_icr_io {
   name = "ibm-entitlement-key"
   namespace = local.namespace
@@ -108,9 +103,8 @@ resource null_resource create_yaml {
   }
 }
 
-resource gitops_module module {
+resource gitops_module setup_gitops {
   depends_on = [null_resource.create_yaml]
-
 
   name = local.name
   namespace = var.namespace
