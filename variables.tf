@@ -146,13 +146,11 @@ variable "memoryrequests" {
 variable "kafka_storageclass" {
   type        = string
   description = "Storage class for kafka - applicable only for persistent storage type"
-  default     = "ibmc-vpc-block-10iops-tier"
 }
 
 variable "zookeeper_storageclass" {
   type        = string
   description = "Storage class for zookeeper - applicable only for persistent storage type"
-  default     = "ibmc-vpc-block-10iops-tier"
 }
 
 variable "kafka_storagetype" {
