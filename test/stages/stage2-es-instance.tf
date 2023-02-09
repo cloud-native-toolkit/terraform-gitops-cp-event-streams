@@ -13,4 +13,6 @@ module "es_instance" {
   entitlement_key = module.cp_catalogs.entitlement_key
   license_use     = module.cp4i-dependencies.eventstreams.license_use
   es_version      = module.cp4i-dependencies.eventstreams.version
+  kafka_storageclass = module.storage.block_storage_class
+  zookeeper_storageclass = module.storage.block_storage_class
 }

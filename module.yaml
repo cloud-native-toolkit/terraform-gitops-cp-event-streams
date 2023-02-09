@@ -37,6 +37,10 @@ versions:
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-cp-es-operator.git
             version: ">= 1.0.0"
+      - id: storage
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-util-storage-class-manager.git
+            version: ">= 1.0.0"
     variables:
       - name: gitops_config
         moduleRef:
@@ -66,3 +70,11 @@ versions:
         moduleRef:
           id: dep-manager
           output: eventstreams.license_use
+      - name: kafka_storageclass
+        moduleRef:
+          id: storage
+          output: block_storage_class
+      - name: zookeeper_storageclass
+        moduleRef:
+          id: storage
+          output: block_storage_class
