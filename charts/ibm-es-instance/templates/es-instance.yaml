@@ -3,6 +3,8 @@ kind: EventStreams
 metadata:
   name: {{ .Values.name }}
   namespace: {{ .Release.Namespace}}
+  labels:
+    {{- include "ibm-es-instance.labels" . | nindent 4 }}
 spec:
   version: {{ .Values.version}}
   license:
