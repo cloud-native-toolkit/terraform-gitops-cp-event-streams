@@ -11,7 +11,7 @@ jobs:
   verify:
     uses: cloud-native-toolkit/action-workflows/.github/workflows/verify-gitops-module.yaml@v1
     with:
-      testcase: ocp4_latest_gitops_cp4i #ocp4_latest_gitops #azure_latest_gitops
+      testcase: ocp4_latest_gitops #ocp4_latest_gitops #azure_latest_gitops
     secrets:
       AWS_CLUSTER_USERNAME: ${{ secrets.AWS_CLUSTER_USERNAME }}
       AWS_CLUSTER_PASSWORD: ${{ secrets.AWS_CLUSTER_PASSWORD }}
