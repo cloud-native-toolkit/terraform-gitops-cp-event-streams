@@ -235,6 +235,246 @@ versions:
           Kafka listerners defaults to secure - override to provide
           light-insecure
         default: '[]'
+    version: v2.1.1
+    outputs:
+      - name: name
+        description: The name of the module
+      - name: branch
+        description: The branch where the module config has been placed
+      - name: namespace
+        description: The namespace where the module will be deployed
+      - name: server_name
+        description: The server where the module will be deployed
+      - name: layer
+        description: The layer where the module is deployed
+      - name: type
+        description: The type of module where the module is deployed
+  - platforms:
+      - kubernetes
+      - ocp3
+      - ocp4
+    providers:
+      - name: gitops
+        source: cloud-native-toolkit/gitops
+    dependencies:
+      - id: gitops
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-tools-gitops.git
+            version: '>= 1.1.0'
+      - id: catalogs
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs.git
+            version: '>= 1.0.0'
+      - id: dep-manager
+        refs:
+          - source: >-
+              github.com/cloud-native-toolkit/terraform-cp4i-dependency-management.git
+            version: '>= 1.0.0'
+      - id: namespace
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-gitops-namespace.git
+            version: '>= 1.0.0'
+      - id: eventstreams
+        refs:
+          - source: >-
+              github.com/cloud-native-toolkit/terraform-gitops-cp-es-operator.git
+            version: '>= 1.0.0'
+      - id: storage
+        refs:
+          - source: >-
+              github.com/cloud-native-toolkit/terraform-util-storage-class-manager.git
+            version: '>= 1.0.0'
+    variables:
+      - name: gitops_config
+        type: |-
+          object({
+              boostrap = object({
+                argocd-config = object({
+                  project = string
+                  repo    = string
+                  url     = string
+                  path    = string
+                })
+              })
+              infrastructure = object({
+                argocd-config = object({
+                  project = string
+                  repo    = string
+                  url     = string
+                  path    = string
+                })
+                payload = object({
+                  repo = string
+                  url  = string
+                  path = string
+                })
+              })
+              services = object({
+                argocd-config = object({
+                  project = string
+                  repo    = string
+                  url     = string
+                  path    = string
+                })
+                payload = object({
+                  repo = string
+                  url  = string
+                  path = string
+                })
+              })
+              applications = object({
+                argocd-config = object({
+                  project = string
+                  repo    = string
+                  url     = string
+                  path    = string
+                })
+                payload = object({
+                  repo = string
+                  url  = string
+                  path = string
+                })
+              })
+            })
+        description: Config information regarding the gitops repo structure
+        moduleRef:
+          id: gitops
+          output: gitops_config
+      - name: git_credentials
+        type: |-
+          list(object({
+              repo     = string
+              url      = string
+              username = string
+              token    = string
+            }))
+        description: The credentials for the gitops repo(s)
+        sensitive: true
+        moduleRef:
+          id: gitops
+          output: git_credentials
+      - name: namespace
+        type: string
+        description: The namespace where the application should be deployed
+        moduleRef:
+          id: namespace
+          output: name
+      - name: kubeseal_cert
+        type: string
+        description: The certificate/public key used to encrypt the sealed secrets
+        default: ''
+        moduleRef:
+          id: gitops
+          output: sealed_secrets_cert
+      - name: server_name
+        type: string
+        description: The name of the server
+        default: default
+        moduleRef:
+          id: gitops
+          output: server_name
+      - name: entitlement_key
+        type: string
+        description: The entitlement key required to access Cloud Pak images
+        sensitive: true
+        moduleRef:
+          id: catalogs
+          output: entitlement_key
+      - name: license_use
+        type: string
+        description: Usage for Production or Non-Production
+        default: CloudPakForIntegrationNonProduction
+        moduleRef:
+          id: dep-manager
+          output: eventstreams.license_use
+      - name: requestIbmServices_iam
+        type: bool
+        description: IAM services
+        default: true
+      - name: requestIbmServices_monitoring
+        type: bool
+        description: Monitoring services
+        default: true
+      - name: kafka_replicas
+        type: number
+        description: Number of kafka replicas
+        default: '"3"'
+      - name: zookeeper_replicas
+        type: number
+        description: Number of zookeeper replicas
+        default: '"3"'
+      - name: es_version
+        type: string
+        description: Version of Event streams to be installed
+        default: 11.0.2
+      - name: cpulimits
+        type: string
+        description: CPU limits for the kafka instance
+        default: '1'
+      - name: cpurequests
+        type: string
+        description: CPU requests for the kafka instance
+        default: 100m
+      - name: memorylimits
+        type: string
+        description: Memory limits for the kafka instance
+        default: 2Gi
+      - name: memoryrequests
+        type: string
+        description: Memory requests for the kafka instance
+        default: 128Mi
+      - name: kafka_storageclass
+        type: string
+        description: Storage class for kafka - applicable only for persistent storage type
+        moduleRef:
+          id: storage
+          output: block_storage_class
+      - name: zookeeper_storageclass
+        type: string
+        description: >-
+          Storage class for zookeeper - applicable only for persistent storage
+          type
+        moduleRef:
+          id: storage
+          output: block_storage_class
+      - name: kafka_storagetype
+        type: string
+        description: Storage type for kafka
+        default: persistent-claim
+      - name: zookeeper_storagetype
+        type: string
+        description: Storage type for zookeeper
+        default: persistent-claim
+      - name: kafka_storagesize
+        type: string
+        description: Storage size - applicable only for persistent storage type
+        default: 10Gi
+      - name: zookeeper_storagesize
+        type: string
+        description: Storage size - applicable only for persistent storage type
+        default: 4Gi
+      - name: service_name
+        type: string
+        description: Event stream instance name
+        default: es-instance
+      - name: es_apiVersion
+        type: string
+        description: Event stream API version
+        default: v1beta2
+      - name: kafka_inter_broker_protocol_version
+        type: string
+        description: Kafka config inter broker protocol version
+        default: '3.2'
+      - name: kafka_log_message_format_version
+        type: string
+        description: Kafka config loag message format version
+        default: '3.2'
+      - name: kafka_listeners
+        type: list
+        description: >-
+          Kafka listerners defaults to secure - override to provide
+          light-insecure
+        default: '[]'
     version: v2.1.0
     outputs:
       - name: name
